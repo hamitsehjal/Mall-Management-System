@@ -1,0 +1,205 @@
+CREATE TABLE STORES (
+storeId      NUMBER(38,0) 	            PRIMARY KEY,
+storeName   VARCHAR(50)         NOT NULL,
+phone    VARCHAR(50)            NOT NULL,
+email      VARCHAR(50)           NOT NULL,
+store_location      VARCHAR(50)           NOT NULL
+);
+
+--drop TABLE STORES;
+CREATE TABLE EMPLOYEES(
+EMPLOYEENUMBER	   NUMBER(38,0)         PRIMARY KEY,
+LASTNAME	       VARCHAR2(50 BYTE)    NOT NULL,
+FIRSTNAME	       VARCHAR2(50 BYTE)    NOT NULL,
+EXTENSION	       VARCHAR2(10 BYTE)    NOT NULL,
+EMAIL	           VARCHAR2(100 BYTE)   NOT NULL,
+STOREID	            NUMBER(38,0),      /* Foreign key */   
+REPORTSTO	       NUMBER(38,0)         NOT NULL,
+JOBTITLE	       VARCHAR2(50 BYTE)    NOT NULL,
+
+CONSTRAINT stores_employees_fk FOREIGN KEY (storeid) REFERENCES stores(storeid)
+);
+
+--drop TABLE EMPLOYEES;
+
+CREATE TABLE CUSTOMERS(
+CUSTOMERNUMBER	    NUMBER(38,0)   PRIMARY KEY,
+CONTACTLASTNAME	    VARCHAR2(50 BYTE)  NOT NULL,
+CONTACTFIRSTNAME	VARCHAR2(50 BYTE)  NOT NULL,
+PHONE	            VARCHAR2(50 BYTE)  NOT NULL,
+ADDRESSLINE1	    VARCHAR2(50 BYTE)  NOT NULL,
+ADDRESSLINE2	    VARCHAR2(50 BYTE), 
+CITY	            VARCHAR2(50 BYTE)  NOT NULL,
+C_STATE	            VARCHAR2(50 BYTE),
+POSTALCODE	        VARCHAR2(15 BYTE),
+COUNTRY	            VARCHAR2(50 BYTE)  NOT NULL,
+SALESREPEMPLOYEENUMBER	NUMBER(38,0),   /* Foreign key */
+
+CONSTRAINT cust_employ_fk FOREIGN KEY (salesrepemployeenumber) REFERENCES employees(employeenumber)
+
+);
+
+--drop table CUSTOMERS;
+
+ 
+   
+   
+CREATE TABLE PRODUCTS(
+PRODUCTCODE	        VARCHAR2(15 BYTE)  PRIMARY KEY,
+PRODUCTNAME	        VARCHAR2(70 BYTE)  NOT NULL,
+PRODUCTDESCRIPTION	VARCHAR2(1000 BYTE),
+QUANTITYINSTOCK	    NUMBER(38,0)       NOT NULL,
+BUYPRICE	       NUMBER(10,2)        NOT NULL,
+MARKETPRICE	       NUMBER(10,2)        NOT NULL,
+STOREID	            NUMBER(38,0),      /* Foreign key */  
+
+CONSTRAINT prod_store_fk FOREIGN KEY (storeid) REFERENCES stores(storeid)
+
+);
+
+--drop table PRODUCTS;
+   
+CREATE TABLE MONTHLYEXPENSES(
+EXPENSEID           VARCHAR2(20)        PRIMARY KEY,
+STOREID	            NUMBER(38,0),      /* Foreign key */  
+RENT                NUMBER(38,2)        NOT NULL,
+MAINTENANCE          NUMBER(38,2)        NOT NULL,
+UTILITIES           NUMBER(38,2)         NOT NULL,
+EXPENSEDATE         VARCHAR2(20)        NOT NULL,
+
+CONSTRAINT expen_store_fk FOREIGN KEY (storeid) REFERENCES stores(storeid)
+
+);
+
+--drop table MONTHLYEXPENSES;
+
+
+CREATE TABLE SALES(
+SALESID        NUMBER(38,0)     PRIMARY KEY,
+STOREID	       NUMBER(38,0),      /* Foreign key */  
+CUSTOMERID     NUMBER(38,0),  /* Foreign key */
+PURCHASEDATE   VARCHAR(20)            NOT NULL,
+
+CONSTRAINT sale_store_fk FOREIGN KEY (storeid) REFERENCES stores(storeid),
+CONSTRAINT sale_cust_fk FOREIGN KEY (customerid) REFERENCES customers(customernumber)
+
+);
+--drop table SALES;
+
+
+   
+CREATE TABLE SALEDETAILS(
+DETAILID        VARCHAR(20 BYTE) PRIMARY KEY,
+SALESID        NUMBER(38,0), /* Foreign key */  
+PRODUCTID	   VARCHAR2(15 BYTE),  /* Foreign key */ 
+QUANTITYORDER  NUMBER(38,0)      NOT NULL,
+PRICEEACH      NUMBER(10,2)     NOT NULL,
+
+CONSTRAINT detail_sale_fk FOREIGN KEY (salesid) REFERENCES sales(salesid),
+CONSTRAINT detail_prod_fk FOREIGN KEY (productid) REFERENCES products(productcode)
+);
+
+
+   
+CREATE TABLE PAYMENTS(
+PAYMENTID      NUMBER(38,0)   PRIMARY KEY,
+CUSTOMERID     NUMBER(38,0),  /* Foreign key */
+PAYMENTDATE    VARCHAR2(20)           NOT NULL,
+AMOUNT         NUMBER(10,2)   NOT NULL,
+PAYMENTTYPE    VARCHAR(20)    NOT NULL,
+
+CONSTRAINT  payment_cust_fk FOREIGN KEY (customerid) REFERENCES customers(customernumber)
+
+);
+
+/* INSERTING DATA TO STORES TABLE */
+
+INSERT ALL
+    INTO stores VALUES (124578, 'ZARA', '+1 416 555 1111', 'ZaraSquareOne@gmail.com','North Wing')
+    INTO stores VALUES (148579, 'ARMANI', '+1 905 555 2222', 'ArmaniSquareOne@gmail.com','East Wing')
+    INTO stores VALUES (200145, 'GAP', '+1 268 555 3333', 'GapSquareOne@gmail.com','South Wing')
+    INTO stores VALUES (211855, 'HM', '+1 268 545 8899', 'hmSquareOne@gmail.com','North Wing')
+    INTO stores VALUES (100655, 'LEVIS', '+1 905 327 2233', 'LevisSquareOne@gmail.com','West Wing')
+
+    SELECT * FROM dual;
+
+
+/* INSERTING DATA TO EMPLOYEES TABLE */
+INSERT ALL
+    INTO employees VALUES (1076,'Firrelli','Jeff',	'x9273','jfirrelli@classicmodelcars.com',124578,1166,'Sales Rep')
+    INTO employees VALUES (1165, 'Jennings','Leslie','x3291','ljennings@classicmodelcars.com',200145,	1143,'VP Sales')
+    INTO employees VALUES (1102, 'Bondur',	'Gerard',	'x5408',	'gbondur@classicmodelcars.com',100655,1056,'VP Marketing')
+    INTO employees VALUES (1166,'Thompson',	'Leslie',	'x4065',	'lthompson@classicmodelcars.com',100655,1143,'Sales Manager (APAC)')
+    INTO employees VALUES (1002, 'Murphy',	'Diane'	,'x5800',	'dmurphy@classicmodelcars.com',211855, 1002,'Sales Rep')
+
+    SELECT * FROM dual;
+
+/* INSERTING DATA TO CUSTOMERS TABLE */
+
+INSERT ALL
+    INTO customers VALUES (129, 'Murphy',	'Julie',	'6505555787',	'5557 North Pendale Street', NULL,	'San Francisco',	'CA',	'94217',	'USA',	1165)
+    INTO customers VALUES (131, 'Lee',	'Kwai',	'2125557818',	'897 Long Airport Avenue', NULL,	'NYC',	'NY',	'10022',	'USA'	,1165)
+    INTO customers VALUES (141,'Freyre','Diego', '(91) 555 94 44',	'C/ Moralzarzal, 86', NULL,'Madrid','NY','28034','Spain',	1076)
+    INTO customers VALUES (151, 'Young',	'Jeff',	'2125557413',	'4092 Furth Circle',	'Suite 400',	'NYC',	'NY',	'10022','USA',	1102)
+    INTO customers VALUES (166,	'Victorino',	'Wendy',	'+65 224 1555',	'106 Linden Road',	NULL,	'Singapore','NY','069045',	'Singapore',	1002)
+ 
+
+    SELECT * FROM dual;
+
+
+
+/* INSERTING DATA TO PRODUCTS TABLE */
+
+INSERT ALL
+INTO PRODUCTS VALUES ('ABC101','PhotoBomber','Jacket with loops used by millenials',9,1758.11,3000.11, 124578)
+INTO PRODUCTS VALUES ('ABC201','Original X','You know what it is!!',7,2498.87,4498.50, 148579)
+INTO PRODUCTS VALUES ('ACC305','Its Yolo','Its my birthday jacket',3,1005.32,3002.5, 200145)
+INTO PRODUCTS VALUES ('ACB305','Babbu Mann','Khantala Mann in the house',4,1348.67,5407.24,211855)
+INTO PRODUCTS VALUES ('ABD410','Its 5911','Ikala industry nu khichi firda',1,5143.50,7847.24,100655 )
+SELECT * FROM dual;
+
+
+/* INSERTING DATA TO MONTHLY TABLE */
+
+INSERT ALL
+INTO MONTHLYEXPENSES VALUES ('1435456OO',124578,20000.00,10758.11,8346.76 ,'2009-05-25')
+INTO MONTHLYEXPENSES VALUES ('1534567DC',148579,30000.00,10498.87,5375.25,'2010-05-25' )
+INTO MONTHLYEXPENSES VALUES ('8636845CA',200145,25000.00,10005.32,8276.53,'2011-05-25' )
+INTO MONTHLYEXPENSES VALUES ('7647546BA',211855,31000.00,10348.67,6893.93,'2012-05-25' )
+INTO MONTHLYEXPENSES VALUES ('1295873AA',100655,40000.00,10143.50,7463.66,'2013-05-25' )
+SELECT * FROM dual;
+
+
+/* INSERTING DATA TO SALES TABLE */
+   
+INSERT ALL
+   INTO SALES VALUES(1034,124578,131,'2022/05/03')
+   INTO SALES VALUES(1035,148579,141,'2022/05/23')
+   INTO SALES VALUES(1036,200145,151,'2022/04/13')
+   INTO SALES VALUES(1037,211855,166,'2003/05/11')
+   INTO SALES VALUES(1038,100655,129,'2003/02/20')
+SELECT * FROM dual;
+
+
+/* INSERTING DATA TO SALEDETAILS TABLE */
+
+INSERT ALL
+   INTO SALEDETAILS VALUES('A34',1034,'ABC101',7,1800.74)
+   INTO SALEDETAILS VALUES('A35',1035,'ABC201',5,2300.57)
+   INTO SALEDETAILS VALUES('B40',1036,'ACC305',3,6540.84)
+   INTO SALEDETAILS VALUES('C32',1037,'ACB305',2,4587.24)
+   INTO SALEDETAILS VALUES('E31',1038,'ABD410',1,7498.65)
+SELECT * FROM dual;
+
+
+/* INSERTING DATA TO PAYMENTS TABLE */
+
+INSERT ALL
+    INTO PAYMENTS VALUES(6958,129,'2021/01/22',10057.28,'Credit')
+    INTO PAYMENTS VALUES(8523,131,'2020/11/24',12000.84,'Credit')
+    INTO PAYMENTS VALUES(7319,141,'2019/07/12',7500.95,'Debit')    
+    INTO PAYMENTS VALUES(4698,151,'2015/02/20',45871.64,'Credit')
+    INTO PAYMENTS VALUES(6688,166,'2003/12/11',19000.47,'Debit')
+SELECT * FROM dual;
+
+

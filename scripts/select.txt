@@ -1,0 +1,197 @@
+create or replace procedure printCustomers
+AS
+eCUSTOMERNUMBER CUSTOMERS.CUSTOMERNUMBER%type;
+eCONTACTLASTNAME CUSTOMERS.CONTACTLASTNAME%type;
+eCONTACTFIRSTNAME CUSTOMERS.CONTACTFIRSTNAME%type;
+ePHONE CUSTOMERS.PHONE%type;
+eADDRESSLINE1  CUSTOMERS.ADDRESSLINE1%type;
+eADDRESSLINE2 CUSTOMERS.ADDRESSLINE2%type;
+eCITY CUSTOMERS.CITY%type;
+eSTATE CUSTOMERS.C_STATE%type;
+ePOSTALCODE CUSTOMERS.POSTALCODE%type;
+eCOUNTRY CUSTOMERS.COUNTRY%type;
+eSALESREPEMPLOYEENUMBER CUSTOMERS.SALESREPEMPLOYEENUMBER%type;
+CURSOR sCursor IS
+SELECT * FROM CUSTOMERS;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('**********************************************************************CUSTOMERS**********************************************************************');
+dbms_output.put_line('CUSTOMERNUMBER                     CONTACTLASTNAME                      PHONE                       CONTACTFIRSTNAME               ADDRESSLINE1                  ADDRESSLINE2             CITY             
+C_STATE             POSTALCODE             COUNTRY             SALESREPEMPLOYEENUMBER');
+dbms_output.put_line('**********************************************************************************************************************************************************');
+LOOP
+FETCH sCursor into eCUSTOMERNUMBER, eCONTACTLASTNAME,eCONTACTFIRSTNAME,ePHONE,eADDRESSLINE1,eADDRESSLINE2,eCITY,eSTATE,ePOSTALCODE,eCOUNTRY,eSALESREPEMPLOYEENUMBER;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eCUSTOMERNUMBER||'                   '||eCONTACTLASTNAME||'                   '||eCONTACTFIRSTNAME||'                 '||ePHONE||'                '||eADDRESSLINE1||'                   '||eADDRESSLINE2||' 
+'||eCITY||'                   '||eSTATE||'                  '||ePOSTALCODE||'                   '||eCOUNTRY||'                   '||eSALESREPEMPLOYEENUMBER);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure printEmployees
+AS
+eEMPLOYEENUMBER EMPLOYEES.EMPLOYEENUMBER%type;
+eLASTNAME EMPLOYEES.LASTNAME%type;
+eFIRSTNAME EMPLOYEES.FIRSTNAME%type;
+eEXTENSION EMPLOYEES.EXTENSION%type;
+eEMAIL  EMPLOYEES.EMAIL%type;
+eSTOREID EMPLOYEES.STOREID%type;
+eREPORTSTO  EMPLOYEES.REPORTSTO%type;
+eJOBTITLE EMPLOYEES.JOBTITLE%type;
+CURSOR sCursor IS
+SELECT * FROM EMPLOYEES;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************EMPLOYEES********************************************');
+dbms_output.put_line('EMPLOYEENUMBER                     LASTNAME                       FIRSTNAME               EXTENSION                  EMAIL             STOREID                  REPORTSTO             JOBTITLE');
+dbms_output.put_line('*****************************************************************************************************');
+
+LOOP
+FETCH sCursor into eEMPLOYEENUMBER, eLASTNAME,eFIRSTNAME,eEXTENSION,eEMAIL,eSTOREID,eREPORTSTO,eJOBTITLE;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eEMPLOYEENUMBER||'                   '||eLASTNAME||'                   '||eFIRSTNAME||'                   '||eEXTENSION||'                   '||eEMAIL||'                   '||eSTOREID||'                   '||eREPORTSTO||'                     '||eJOBTITLE);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure spMonthlyExpensesSelect
+AS
+eSTOREID MONTHLYEXPENSES.STOREID%type;
+eRENT MONTHLYEXPENSES.RENT%type;
+eMAINTENANCE MONTHLYEXPENSES.MAINTENANCE%type;
+eUTILITIES MONTHLYEXPENSES.UTILITIES%type;
+eEXPENSEDATE  MONTHLYEXPENSES.EXPENSEDATE%type;
+eEXPENSEID MONTHLYEXPENSES.EXPENSEID%type;
+CURSOR sCursor IS
+SELECT * FROM MONTHLYEXPENSES;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************MONTHLYEXPENSES********************************************');
+dbms_output.put_line('EXPENSEID                 STOREID                     RENT                       MAINTENANCE               UTILITIES                  EXPENSEDATE');
+dbms_output.put_line('***************************************************************************************************************');
+
+LOOP
+FETCH sCursor into eEXPENSEID,eSTOREID, eRENT,eMAINTENANCE,eUTILITIES,eEXPENSEDATE;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eEXPENSEID||'                  '||eSTOREID ||'                   '||eRENT||'                   '||eMAINTENANCE||'                   '||eUTILITIES||'                   '||eEXPENSEDATE);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure spPaymentsSelect
+AS
+ePAYMENTID PAYMENTS.PAYMENTID%type;
+eCUSTOMERID PAYMENTS.CUSTOMERID%type;
+ePAYMENTDATE PAYMENTS.PAYMENTDATE%type;
+eAMOUNT PAYMENTS.AMOUNT%type;
+ePAYMENTTYPE PAYMENTS.PAYMENTTYPE%type;
+CURSOR sCursor IS
+SELECT * FROM PAYMENTS;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************PAYMENTS********************************************');
+dbms_output.put_line('PAYMENTID               CUSTOMERID                PAYMENTDATE                    AMOUNT                 PAYMENTTYPE');
+dbms_output.put_line('*****************************************************************************************************');
+
+LOOP
+FETCH sCursor into ePAYMENTID, eCUSTOMERID,ePAYMENTDATE,eAMOUNT,ePAYMENTTYPE;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(ePAYMENTID||'                   '||eCUSTOMERID||'                   '||ePAYMENTDATE||'                   '||ePAYMENTTYPE||'                   '||eAMOUNT);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure printProducts
+AS
+ePRODUCTCODE Products.PRODUCTCODE%type;
+ePRODUCTNAME Products.PRODUCTNAME%type;
+ePRODUCTDESCRIPTION Products.PRODUCTDESCRIPTION%type;
+eQUANTITYINSTOCK Products.QUANTITYINSTOCK%type;
+eBUYPRICE Products.BUYPRICE%type;
+eMARKETPRICE Products.MARKETPRICE%type;
+eSTOREID Products.STOREID%type;
+CURSOR sCursor IS
+SELECT * FROM Products;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************PRODUCTS********************************************');
+dbms_output.put_line('PRODUCTCODE             PRODUCTNAME             PRODUCTDESCRIPTION                       QUANTITYINSTOCK            BUYPRICE                     MARKETPRICE                     eSTOREID');
+dbms_output.put_line('*********************************************************************************************************************************************************************');
+
+LOOP
+FETCH sCursor into ePRODUCTCODE, ePRODUCTNAME,ePRODUCTDESCRIPTION,
+eQUANTITYINSTOCK,eBUYPRICE,eMARKETPRICE,eSTOREID;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(ePRODUCTCODE || '            ' || ePRODUCTNAME || '            ' || ePRODUCTDESCRIPTION|| '                                 '||eQUANTITYINSTOCK|| '            '||eBUYPRICE|| '            '||eMARKETPRICE|| '            '||eSTOREID);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure spSaleDetailsSelect
+AS
+eDETAILID SALEDETAILS.DETAILID%type;
+eSALESID SALEDETAILS.SALESID%type;
+ePRODUCTID SALEDETAILS.PRODUCTID%type;
+eQUANTITYORDER SALEDETAILS.QUANTITYORDER%type;
+ePRICEEACH SALEDETAILS.PRICEEACH%type;
+CURSOR sCursor IS
+SELECT * FROM SALEDETAILS;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************SALEDETAILS********************************************');
+dbms_output.put_line('DETAILID               SALESID                     PRODUCTID                       QUANTITYORDER               PRICEEACH');
+dbms_output.put_line('*******************************************************************************************************');
+
+LOOP
+FETCH sCursor into eDETAILID,eSALESID, ePRODUCTID,eQUANTITYORDER,ePRICEEACH;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eDETAILID||'                   '||eSALESID||'                   '||ePRODUCTID||'                   '||eQUANTITYORDER||'                   '||ePRICEEACH);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure spSalesSelect
+AS
+eSALESID SALES.SALESID%type;
+eSTOREID SALES.STOREID%type;
+eCUSTOMERID SALES.CUSTOMERID%type;
+ePURCHASEDATE SALES.PURCHASEDATE%type;
+CURSOR sCursor IS
+SELECT * FROM SALES;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************SALES********************************************');
+dbms_output.put_line('SALESID                     STOREID                       CUSTOMERID               PURCHASEDATE');
+dbms_output.put_line('***********************************************************************************************');
+
+LOOP
+FETCH sCursor into eSALESID, eSTOREID,eCUSTOMERID,ePURCHASEDATE;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eSALESID||'                   '||eSTOREID||'                   '||eCUSTOMERID||'                   '||ePURCHASEDATE);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
+create or replace procedure spStoresSelect
+AS
+eStoreid Stores.Storeid%type;
+eStorename Stores.Storename%type;
+ePhone Stores.Phone%type;
+eEmail Stores.Phone%type;
+eSTORE_LOCATION Stores.STORE_LOCATION%type;
+CURSOR sCursor IS
+SELECT * FROM Stores;
+BEGIN
+OPEN sCursor;
+dbms_output.put_line('********************************************STORES********************************************');
+dbms_output.put_line('Storeid            Storename                  Phone                        Email                     store location');
+dbms_output.put_line('*************************************************************************************************');
+
+LOOP
+FETCH sCursor into eStoreid, eStorename,ePhone,eEmail,eSTORE_LOCATION;
+EXIT WHEN sCursor%notfound;
+dbms_output.put_line(eStoreid || '            ' || eStorename || '            ' || ePhone|| '            '||eEmail|| '            '||eSTORE_LOCATION);
+END LOOP;
+CLOSE sCursor;
+END;
+--=========================================================================================================
