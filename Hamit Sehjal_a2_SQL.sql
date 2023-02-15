@@ -1,18 +1,5 @@
-/*
-I AM YOUR INDIVIDUAL SQL FILE
 
-Full Name - Hamit Sehjal
-Student ID - 139238208
-Mail - hsehjal@myseneca.ca
 
-format followed: 1 CRUD stored procedure followed by example procedure
-
-eg:
-1 create/read/update/delete STORED PROCEDURE
---=======================================
-1 example procedure
-
-*/
 
 --STORES TABLE
 
